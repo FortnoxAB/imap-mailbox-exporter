@@ -66,7 +66,7 @@ func (exp *Exporter) queryImapServer() ImapState {
 	// Connect to the server
 	imapClient, err := client.DialTLS(exp.mailserver, &tls.Config{InsecureSkipVerify: true})
 	if err != nil {
-		logrus.Error(err)
+		logrus.Error("failed DialTLS ", err)
 		return state
 	}
 
@@ -80,14 +80,14 @@ func (exp *Exporter) queryImapServer() ImapState {
 	}
 	err = imapClient.Login(exp.username, exp.password)
 	if err != nil {
-		logrus.Error(err)
+		logrus.Error("failed logging in ", err)
 		return ImapState{}
 	}
 
 	// Open a mailbox read-only (synchronous command - no need for imap.Wait)
 	status, err := imapClient.Select(exp.mailbox, true)
 	if err != nil {
-		logrus.Error(err)
+		logrus.Error("failed selecing mailbox ", err)
 		return ImapState{}
 	}
 
